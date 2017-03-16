@@ -6,7 +6,19 @@
 package mainFrame;
 
 import java.awt.CardLayout;
+import java.awt.Component;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -17,8 +29,58 @@ public class COMP305A2 extends javax.swing.JFrame {
     /**
      * Creates new form COMP305A2
      */
-    public COMP305A2() {
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "mysql";
+    private static final String CONN_STRING = "jdbc:mysql://localhost/travel";
+    Connection conn = null;
+    Statement stmt = null;
+    ResultSet rs = null;
+
+    public void connectToDB() throws SQLException {
+        try {
+            conn = DriverManager.getConnection(CONN_STRING, USERNAME, PASSWORD);
+            stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+        } catch (SQLException e) {
+
+            System.err.println(e);
+
+        }
+    }
+
+    public void personCard() throws SQLException {
+        name.setText(rs.getString("name"));
+        job.setText(rs.getString("jobtitle"));
+        frequentFlyer.setText(rs.getString("frequentflyer"));
+        if ("1".equals(frequentFlyer.getText())) {
+            frequentFlyer.setText("Yes");
+        } else {
+            frequentFlyer.setText("No");
+        }
+    }
+    public void flightCard() throws SQLException {
+        depPort.setText(rs.getString("depairport"));
+        arrPort.setText(rs.getString("arrairport"));
+        arrTime.setText(rs.getString("arrtime"));
+        depTime.setText(rs.getString("deptime"));
+        direction.setText(rs.getString("direction"));
+        flightNum.setText(rs.getString("flightnum"));
+        airName.setText(rs.getString("airlinename"));
+        status.setText(rs.getString("bookingstatus"));
+    }
+    public void hotelCard() throws SQLException {
+        hotelName.setText(rs.getString("hotelname"));
+        inDate.setText(rs.getString("checkindate"));
+        outDate.setText(rs.getString("checkoutdate"));
+        guests.setText(rs.getString("guests")); 
+        bStatus.setText(rs.getString("bookingstatus"));
+    }
+
+
+
+    public COMP305A2() throws SQLException {
+        connectToDB();
         initComponents();
+
     }
 
     /**
@@ -31,24 +93,69 @@ public class COMP305A2 extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
+        title = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         btn1 = new javax.swing.JButton();
         btn2 = new javax.swing.JButton();
         btn3 = new javax.swing.JButton();
         cLayout = new javax.swing.JPanel();
-        card1 = new javax.swing.JPanel();
-        card2 = new javax.swing.JPanel();
-        card3 = new javax.swing.JPanel();
+        hotel = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+        hotelName = new javax.swing.JTextField();
+        inDate = new javax.swing.JTextField();
+        outDate = new javax.swing.JTextField();
+        guests = new javax.swing.JTextField();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jButton8 = new javax.swing.JButton();
+        jLabel16 = new javax.swing.JLabel();
+        bStatus = new javax.swing.JTextField();
+        flight = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
+        depPort = new javax.swing.JTextField();
+        arrPort = new javax.swing.JTextField();
+        arrTime = new javax.swing.JTextField();
+        depTime = new javax.swing.JTextField();
+        direction = new javax.swing.JTextField();
+        flightNum = new javax.swing.JTextField();
+        airName = new javax.swing.JTextField();
+        status = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        person = new javax.swing.JPanel();
+        firstBtn = new javax.swing.JButton();
+        prevBtn = new javax.swing.JButton();
+        nextBtn = new javax.swing.JButton();
+        lastBtn = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        name = new javax.swing.JTextField();
+        job = new javax.swing.JTextField();
+        frequentFlyer = new javax.swing.JTextField();
+        errorText = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(153, 153, 153));
         jPanel1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
 
-        jLabel1.setText("Assignment 2");
-        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        jPanel1.add(jLabel1);
+        title.setText("Assignment 2");
+        title.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        jPanel1.add(title);
 
         getContentPane().add(jPanel1, java.awt.BorderLayout.PAGE_START);
 
@@ -58,8 +165,8 @@ public class COMP305A2 extends javax.swing.JFrame {
         jPanel2.setMinimumSize(new java.awt.Dimension(100, 290));
         jPanel2.setPreferredSize(new java.awt.Dimension(100, 50));
 
-        btn1.setText("Page 1");
-        btn1.setName("card1"); // NOI18N
+        btn1.setText("Person");
+        btn1.setName("person"); // NOI18N
         btn1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 singleHandler(evt);
@@ -67,8 +174,11 @@ public class COMP305A2 extends javax.swing.JFrame {
         });
         jPanel2.add(btn1);
 
-        btn2.setText("Page 2");
-        btn2.setName("card2"); // NOI18N
+        btn2.setText("Hotel");
+        btn2.setMaximumSize(new java.awt.Dimension(65, 23));
+        btn2.setMinimumSize(new java.awt.Dimension(65, 23));
+        btn2.setName("hotel"); // NOI18N
+        btn2.setPreferredSize(new java.awt.Dimension(65, 23));
         btn2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 singleHandler(evt);
@@ -76,8 +186,9 @@ public class COMP305A2 extends javax.swing.JFrame {
         });
         jPanel2.add(btn2);
 
-        btn3.setText("Page 3");
-        btn3.setName("card3"); // NOI18N
+        btn3.setText("Flight");
+        btn3.setName("flight"); // NOI18N
+        btn3.setPreferredSize(new java.awt.Dimension(65, 23));
         btn3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 singleHandler(evt);
@@ -89,54 +200,370 @@ public class COMP305A2 extends javax.swing.JFrame {
 
         cLayout.setLayout(new java.awt.CardLayout());
 
-        card1.setBackground(new java.awt.Color(153, 255, 255));
-        card1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
-        card1.setName("card1"); // NOI18N
+        hotel.setBackground(new java.awt.Color(153, 204, 255));
+        hotel.setName("hotel"); // NOI18N
 
-        javax.swing.GroupLayout card1Layout = new javax.swing.GroupLayout(card1);
-        card1.setLayout(card1Layout);
-        card1Layout.setHorizontalGroup(
-            card1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 296, Short.MAX_VALUE)
+        jLabel1.setText("Hotel Name:");
+
+        jLabel13.setText("Check In Date:");
+
+        jLabel14.setText("Check Out Date:");
+
+        jLabel15.setText("Guests:");
+
+        jButton5.setText("First");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                firstBtnActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("Prev");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prevBtnActionPerformed(evt);
+            }
+        });
+
+        jButton7.setText("Next");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextBtnActionPerformed(evt);
+            }
+        });
+
+        jButton8.setText("Last");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lastBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel16.setText("Booking Status:");
+
+        javax.swing.GroupLayout hotelLayout = new javax.swing.GroupLayout(hotel);
+        hotel.setLayout(hotelLayout);
+        hotelLayout.setHorizontalGroup(
+            hotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(hotelLayout.createSequentialGroup()
+                .addGroup(hotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(hotelLayout.createSequentialGroup()
+                        .addGap(150, 150, 150)
+                        .addComponent(jButton5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton8))
+                    .addGroup(hotelLayout.createSequentialGroup()
+                        .addGap(172, 172, 172)
+                        .addGroup(hotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(hotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addGroup(hotelLayout.createSequentialGroup()
+                                    .addComponent(jLabel13)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(inDate, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(hotelLayout.createSequentialGroup()
+                                    .addComponent(jLabel15)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(guests, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(hotelLayout.createSequentialGroup()
+                                    .addComponent(jLabel14)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(outDate, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(hotelLayout.createSequentialGroup()
+                                    .addComponent(jLabel16)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                    .addComponent(bStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(hotelLayout.createSequentialGroup()
+                                .addGap(21, 21, 21)
+                                .addComponent(jLabel1)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(hotelName, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap(155, Short.MAX_VALUE))
         );
-        card1Layout.setVerticalGroup(
-            card1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 286, Short.MAX_VALUE)
+        hotelLayout.setVerticalGroup(
+            hotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(hotelLayout.createSequentialGroup()
+                .addGap(63, 63, 63)
+                .addGroup(hotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(hotelName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(5, 5, 5)
+                .addGroup(hotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(inDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(hotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel14)
+                    .addComponent(outDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(hotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addComponent(bStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(hotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel15)
+                    .addComponent(guests, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
+                .addGroup(hotelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton6)
+                    .addComponent(jButton7)
+                    .addComponent(jButton8))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
-        cLayout.add(card1, "card1");
+        cLayout.add(hotel, "hotel");
 
-        card2.setBackground(new java.awt.Color(153, 204, 255));
-        card2.setName("card2"); // NOI18N
+        flight.setBackground(new java.awt.Color(153, 153, 255));
+        flight.setName("flight"); // NOI18N
 
-        javax.swing.GroupLayout card2Layout = new javax.swing.GroupLayout(card2);
-        card2.setLayout(card2Layout);
-        card2Layout.setHorizontalGroup(
-            card2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        jLabel5.setText("Departure Airport:");
+
+        jLabel6.setText("Arrival Airport:");
+
+        jLabel7.setText("Arrival Time:");
+
+        jLabel8.setText("Departure Time:");
+
+        jLabel9.setText("Direction:");
+
+        jLabel10.setText("Flight Number:");
+
+        jLabel11.setText("Airline Name:");
+
+        jLabel12.setText("Status:");
+
+        jButton1.setText("First");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                firstBtnActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Prev");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prevBtnActionPerformed(evt);
+            }
+        });
+
+        jButton3.setText("Next");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextBtnActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Last");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lastBtnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout flightLayout = new javax.swing.GroupLayout(flight);
+        flight.setLayout(flightLayout);
+        flightLayout.setHorizontalGroup(
+            flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(flightLayout.createSequentialGroup()
+                .addGroup(flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(flightLayout.createSequentialGroup()
+                        .addGap(110, 110, 110)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton4))
+                    .addGroup(flightLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(flightLayout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(flightNum, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(flightLayout.createSequentialGroup()
+                                .addGroup(flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addGroup(flightLayout.createSequentialGroup()
+                                        .addComponent(jLabel5)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(depPort, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(flightLayout.createSequentialGroup()
+                                        .addGroup(flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                            .addGroup(flightLayout.createSequentialGroup()
+                                                .addComponent(jLabel6)
+                                                .addGap(7, 7, 7))
+                                            .addGroup(flightLayout.createSequentialGroup()
+                                                .addGroup(flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                                    .addComponent(jLabel8)
+                                                    .addComponent(jLabel7))
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
+                                        .addGroup(flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(arrTime)
+                                            .addComponent(arrPort)
+                                            .addComponent(depTime, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGroup(flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, flightLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jLabel12)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(flightLayout.createSequentialGroup()
+                                        .addGap(95, 95, 95)
+                                        .addComponent(jLabel9)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(direction, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(flightLayout.createSequentialGroup()
+                                        .addGap(78, 78, 78)
+                                        .addComponent(jLabel11)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(airName, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                .addContainerGap(65, Short.MAX_VALUE))
         );
-        card2Layout.setVerticalGroup(
-            card2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 290, Short.MAX_VALUE)
+        flightLayout.setVerticalGroup(
+            flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(flightLayout.createSequentialGroup()
+                .addGap(54, 54, 54)
+                .addGroup(flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel9)
+                    .addComponent(depPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(direction, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jLabel10)
+                    .addComponent(arrPort, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(flightNum, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7)
+                    .addComponent(jLabel11)
+                    .addComponent(arrTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(airName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel12)
+                    .addComponent(depTime, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(status, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(41, 41, 41)
+                .addGroup(flightLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton2)
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
-        cLayout.add(card2, "card2");
+        cLayout.add(flight, "flight");
 
-        card3.setBackground(new java.awt.Color(153, 153, 255));
-        card3.setName("card3"); // NOI18N
+        person.setBackground(new java.awt.Color(153, 255, 255));
+        person.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0), 2));
+        person.setName("person"); // NOI18N
 
-        javax.swing.GroupLayout card3Layout = new javax.swing.GroupLayout(card3);
-        card3.setLayout(card3Layout);
-        card3Layout.setHorizontalGroup(
-            card3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+        firstBtn.setText("First");
+        firstBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                firstBtnActionPerformed(evt);
+            }
+        });
+
+        prevBtn.setText("Prev");
+        prevBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                prevBtnActionPerformed(evt);
+            }
+        });
+
+        nextBtn.setText("Next");
+        nextBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextBtnActionPerformed(evt);
+            }
+        });
+
+        lastBtn.setText("Last");
+        lastBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                lastBtnActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Name:");
+
+        jLabel3.setText("Job Title:");
+
+        jLabel4.setText("Frequent Flyer:");
+
+        errorText.setEditable(false);
+        errorText.setBackground(new java.awt.Color(102, 255, 255));
+        errorText.setForeground(new java.awt.Color(255, 102, 0));
+        errorText.setBorder(null);
+
+        javax.swing.GroupLayout personLayout = new javax.swing.GroupLayout(person);
+        person.setLayout(personLayout);
+        personLayout.setHorizontalGroup(
+            personLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(personLayout.createSequentialGroup()
+                .addGroup(personLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(personLayout.createSequentialGroup()
+                        .addGroup(personLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(personLayout.createSequentialGroup()
+                                .addGap(139, 139, 139)
+                                .addGroup(personLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel4))
+                                .addGap(40, 40, 40)
+                                .addGroup(personLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(name)
+                                    .addComponent(job)
+                                    .addComponent(frequentFlyer)))
+                            .addGroup(personLayout.createSequentialGroup()
+                                .addGap(130, 130, 130)
+                                .addComponent(firstBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(prevBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(nextBtn)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(lastBtn)))
+                        .addGap(0, 161, Short.MAX_VALUE))
+                    .addComponent(errorText, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addContainerGap())
         );
-        card3Layout.setVerticalGroup(
-            card3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 290, Short.MAX_VALUE)
+        personLayout.setVerticalGroup(
+            personLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, personLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(errorText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(35, 35, 35)
+                .addGroup(personLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(name, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(personLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(job, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(personLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(frequentFlyer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 66, Short.MAX_VALUE)
+                .addGroup(personLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(firstBtn)
+                    .addComponent(prevBtn)
+                    .addComponent(nextBtn)
+                    .addComponent(lastBtn))
+                .addGap(41, 41, 41))
         );
 
-        cLayout.add(card3, "card3");
+        cLayout.add(person, "person");
 
         getContentPane().add(cLayout, java.awt.BorderLayout.CENTER);
 
@@ -144,14 +571,92 @@ public class COMP305A2 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void singleHandler(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_singleHandler
-        JButton btn = (JButton)evt.getSource();
-        ((CardLayout)cLayout.getLayout()).show(cLayout,btn.getName() );
+        JButton btn = (JButton) evt.getSource();
+        ((CardLayout) cLayout.getLayout()).show(cLayout, btn.getName());
+        title.setText(btn.getName() + " Info");
+        try {
+            rs = stmt.executeQuery("SELECT * FROM " + btn.getName());
+        } catch (SQLException ex) {
+            Logger.getLogger(COMP305A2.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_singleHandler
+
+    private void firstBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_firstBtnActionPerformed
+
+        try {
+            rs.first();
+            if (person.isVisible()) {
+                personCard();
+            }
+            if (flight.isVisible()) {
+                flightCard();
+            }
+            if (hotel.isVisible()){
+                hotelCard();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(COMP305A2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_firstBtnActionPerformed
+
+    private void prevBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_prevBtnActionPerformed
+        try {
+            rs.previous();
+            if (person.isVisible()) {
+                personCard();
+            }
+            if (flight.isVisible()) {
+                flightCard();
+            }
+            if (hotel.isVisible()){
+                hotelCard();
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(COMP305A2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_prevBtnActionPerformed
+
+    private void nextBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextBtnActionPerformed
+        try {
+            rs.next();
+            if (person.isVisible()) {
+                personCard();
+            }
+            if (flight.isVisible()) {
+                flightCard();
+            }
+            if (hotel.isVisible()){
+                hotelCard();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(COMP305A2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_nextBtnActionPerformed
+
+    private void lastBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_lastBtnActionPerformed
+        try {
+            rs.last();
+            if (person.isVisible()) {
+                personCard();
+            }
+            if (flight.isVisible()) {
+                flightCard();
+            }
+            if (hotel.isVisible()){
+                hotelCard();
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(COMP305A2.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_lastBtnActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -178,21 +683,70 @@ public class COMP305A2 extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new COMP305A2().setVisible(true);
+                try {
+                    new COMP305A2().setVisible(true);
+                } catch (SQLException ex) {
+                    Logger.getLogger(COMP305A2.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField airName;
+    private javax.swing.JTextField arrPort;
+    private javax.swing.JTextField arrTime;
+    private javax.swing.JTextField bStatus;
     private javax.swing.JButton btn1;
     private javax.swing.JButton btn2;
     private javax.swing.JButton btn3;
     private javax.swing.JPanel cLayout;
-    private javax.swing.JPanel card1;
-    private javax.swing.JPanel card2;
-    private javax.swing.JPanel card3;
+    private javax.swing.JTextField depPort;
+    private javax.swing.JTextField depTime;
+    private javax.swing.JTextField direction;
+    private javax.swing.JTextField errorText;
+    private javax.swing.JButton firstBtn;
+    private javax.swing.JPanel flight;
+    private javax.swing.JTextField flightNum;
+    private javax.swing.JTextField frequentFlyer;
+    private javax.swing.JTextField guests;
+    private javax.swing.JPanel hotel;
+    private javax.swing.JTextField hotelName;
+    private javax.swing.JTextField inDate;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JTextField job;
+    private javax.swing.JButton lastBtn;
+    private javax.swing.JTextField name;
+    private javax.swing.JButton nextBtn;
+    private javax.swing.JTextField outDate;
+    private javax.swing.JPanel person;
+    private javax.swing.JButton prevBtn;
+    private javax.swing.JTextField status;
+    private javax.swing.JLabel title;
     // End of variables declaration//GEN-END:variables
 }
